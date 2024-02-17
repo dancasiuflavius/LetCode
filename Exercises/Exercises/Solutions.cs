@@ -195,6 +195,186 @@ namespace Exercises
 
             return maxLength;
         }
+        public static bool IsPalindrome(int x)
+        {
+            if (x < 0)
+                return false;
+
+            string s = x.ToString();
+            HashSet<char> charSet = new HashSet<char>();
+
+            foreach (char c in s)
+            {
+                if (!charSet.Contains(c))
+                    charSet.Add(c);
+                else
+                    charSet.Remove(c);
+            }
+
+            return charSet.Count <= 1;
+        }
+        public static string LongestCommonPrefix(string[] strs) // Nu stiu cum sa o fac cu Dictionary sau HashSet
+        {
+            if (strs == null || strs.Length == 0)
+                return "";
+
+            string prefix = strs[0];
+
+            for (int i = 1; i < strs.Length; i++)
+            {
+                while (strs[i].IndexOf(prefix) != 0)
+                {
+                    prefix = prefix.Substring(0, prefix.Length - 1);
+                    if (prefix == "")
+                        return "";
+                }
+            }
+
+            return prefix;
+        }
+        //Linked List Cycle???
+        /*Given head, the head of a linked list, determine if the linked list has a cycle in it.
+
+        There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. 
+        Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter. */
+
+        public static int MajorityElement(int[] nums)
+        {
+            HashSet<int> uniqueElements = new HashSet<int>();
+            Dictionary<int, int> elementCounts = new Dictionary<int, int>();
+
+            // folosim HashSet si adaugam doar elementele unice. HashSet permite doar elemente unice.
+            foreach (int num in nums)
+            {
+                uniqueElements.Add(num);
+            }
+
+            // Numaram frecventa la fiecare element unic
+            foreach (int element in uniqueElements)
+            {
+                int count = 0;
+                foreach (int num in nums)
+                {
+                    if (num == element)
+                    {
+                        count++;
+                    }
+                }
+                elementCounts[element] = count;
+            }
+
+            // Facem maximul
+            int majorityElement = nums[0]; // Initialize with any value
+            int maxCount = 0;
+
+            foreach (var x in elementCounts)
+            {
+                if (x.Value > maxCount)
+                {
+                    maxCount = x.Value;
+                    majorityElement = x.Key;
+                }
+            }
+
+            return majorityElement;
+        }
+        #region
+        public static bool IsHappy(int n)
+        {
+            HashSet<int> seen = new HashSet<int>();
+
+            while (n != 1 && !seen.Contains(n))
+            {
+                seen.Add(n);
+                n = SumaPatrate(n);
+            }
+
+            return n == 1;
+        }
+
+        public static int SumaPatrate(int n)
+        {
+            int sum = 0;
+            while (n > 0)
+            {
+                int cif = n % 10;
+                sum += cif * cif;
+                n /= 10;
+            }
+            return sum;
+        }
+        #endregion
+
+        public static bool ContainsDuplicate(int[] nums)
+        {
+            HashSet<int> set = new HashSet<int>();
+
+            foreach (int num in nums)
+            {
+                if (set.Contains(num))
+                {
+                    return true; // Am gasit dublura
+                }
+                else
+                {
+                    set.Add(num);
+                }
+            }
+
+            return false; 
+        }
+        public static bool IsAnagram(string s, string t)// ????
+        {
+            if (s.Length != t.Length)
+                return false;
+
+            Dictionary<char, int> charFrequency = new Dictionary<char, int>();
+
+           
+            foreach (char c in s)
+            {
+                if (!charFrequency.ContainsKey(c))
+                    charFrequency[c] = 1;
+                else
+                    charFrequency[c]++;
+            }
+            return true;//am pusa asa doar 
+            
+        }
+        public static int MissingNumber(int[] nums)
+        {
+            HashSet<int> set = new HashSet<int>();
+
+            foreach (int num in nums)
+            {
+                set.Add(num);
+            }
+
+            int n = nums.Length + 1; 
+            for (int i = 0; i < n; i++)
+            {
+                if (!set.Contains(i))
+                {
+                    return i;
+                }
+            }
+            return n;
+        }
+        //290. Word Pattern ???
+        public static int[] Intersection(int[] nums1, int[] nums2)
+        {
+            HashSet<int> set1 = new HashSet<int>(nums1);
+            HashSet<int> set2 = new HashSet<int>(nums2);
+
+           
+            set1.IntersectWith(set2);
+
+           
+            int[] intersection = new int[set1.Count];
+            set1.CopyTo(intersection);
+
+            return intersection;
+        }
     }
 }
 
